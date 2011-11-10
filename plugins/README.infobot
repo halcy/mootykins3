@@ -1,0 +1,17 @@
+infobot.pl - An infobot plugin for mootykins3
+=============================================
+
+This plugin give mootykins3 simple infobot capabilities. You can ask it questions like "who is mootykins?", and it will respond with previously learned facts. It learns passiveley, so it will get smarter by just sitting around.
+
+Features
+--------
+
+	* Uses different fact databases for different channels, or one for multiple.
+	* Fuzzy matching, so you can ask for "motykins" and still get results on "mootykins".
+
+Configuration values
+--------------------
+
+plugin::infobot::db - The default fact database file to use. Default: info_db
+mootykins::servers::<server name>::plugin::infobot::db - The fact database file to use, serverwide setting.
+mootykins::channels::<server name>::<channel name>::plugin::infobot::db - The fact database file to use, channelwide setting.

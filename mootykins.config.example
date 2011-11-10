@@ -1,0 +1,45 @@
+[mootykins]
+nick = mootykins
+ircname = mootykins3 v0.93 beta
+port = 6667
+admin_password = romkatt
+
+[mootykins::servers::example]
+address = irc.example.com
+channels = #example, #example2
+plugins = triggers, kirby_dance, help, infobot, give_stuff, goauld, bash
+plugin::triggers::active = !bots, !rules, !do_something
+plugin::give_stuff::active = beer, vodka
+
+[mootykins::channels::example::#example]
+plugins = kirby_dance, triggers, help
+plugin::triggers::active = !bots
+plugin::relay::to = #example2 example
+
+[plugin::kirby_dance]
+texts = HEART!, SUPER HAPPY FUN!, OH YEAH!, PINK FLUFFY BALLS OF LOVE!, KIRBY DANCE!, WOOOOOOOOOO!, SUNSHINE!, HEART!, IT IS THE POWER OF LOVE!, <3 %to, <3 %sender
+
+[plugin::triggers::!rules]
+type = notice
+message = <gpgarrettboast> Rules: Don't use the !rules trigger, <gpgarrettboast> <end of rules>
+
+[plugin::triggers::!do_something]
+type = action
+message = slaps %sender around a bit with a mid-sized imperial class star destroyer.
+to = channel
+
+[plugin::triggers::!bots]
+type = say
+message = <dalek> Ex-ter-minate! Ex-ter-minate! </dalek>, For real: Type !help for bot help.
+to = channel
+
+[plugin::infobot]
+db = info_db
+
+[plugin::give_stuff::beer]
+type_file = plugins/beer_types.txt
+prefix = a fresh,, cold,
+
+[plugin::give_stuff::vodka]
+type_file = plugins/vodka_types.txt
+prefix = a nice glass of, a nice bottle of

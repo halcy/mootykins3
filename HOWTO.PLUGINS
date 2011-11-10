@@ -1,0 +1,103 @@
+A short guide to mootykins3 plugins
+===================================
+
+1. Introduction
+2. Plugin methods
+3. Provided functions
+4. Additional info about the IRC object
+5. Colour reference
+
+1. INTRODUCTION
+---------------
+
+A mootykins3 plugin is simply a .pl file placed in the plugin directory, which must have a few special functions: on_load, on_message and help. The plugin is automatically loaded with use strict and use warnings set, and is made to be a subclass of mootyplug::plugin.
+
+2. PLUGIN METHODS
+-----------------
+
+on_load: 
+This is called by mootykins when the plugin is first loaded. It gets no parameters, and is meant for general initializing and config reading.
+
+on_unload: 
+Gets called when the plugin is unloaded. A plugin should clean up behind itself in this function.
+
+on_message:
+This gets called for every recieved message. It gets this list of parameters: 
+	$self, $message, $speaker, $rspsimple, $sndsimple, $private, $addressed, $irc
+	
+	* $self is this plugin object.
+	* $message is the recieved message.
+	* $speaker is the sender of the message, with hostmask etc intact.
+	* $rspsimple is who you should respond to if you, it's either the channel the message was said in, or the sender of the message for private ones.
+	* $sndsimple is just the nick of the sender, when you want to simply respond in private.
+	* $private is set to a true value when the message was private, and false when not.
+	* $addressed is set to a true value when the bot was specifically addressed, and false when not.
+	* $irc is the POE IRC object for this connection, with some additions. See the end of the file for that.
+
+help:
+This gets called by the help plugin to retrieve help. It gets four parameters: 
+	$self, $private, $channel, $irc
+
+	* $self is this plugin object.
+	* $private is set when the help was requested privateley.
+	* $channel is set to the channel the help was requested in (if not private)
+	* $irc is the POE IRC object for this connection, with some additions. See the end of the file for that.
+
+3. PROVIDED FUNCTIONS
+---------------------
+
+mootykins3 has quite some functions to make your life easier, nameley these:
+
+	* tolog ( $text ) - Prints a message to stdout, with a "\n" at the end. Might be further improved with timestamps etc. in the future.
+	* get_conf_value ( $item ), get_conf_values ( $item ) - Get the given config value or values (as arrayref) from the config file.
+	* get_channel_conf_value ( $channel, $item ), get_channel_conf_values ( $channel, $item ) - Same, but with the base set to a channel.
+	* get_server_conf_value ( $irc, $item ), get_server_conf_values ( $irc, $item ) - Same, but with the base set to a server.
+	* say ( @_, $target, $message ), notice ( @_, $target, $message ),  action ( @_, $target, $message ) - /msg, /notice or /me the message to the target. 
+	* colour ( $colour_id ), bold ( ), underline ( ), invert ( ) - Return a style control character.
+	* reset_style ( ) - Return a style reset control character.
+	* fuzzy_eq ( $value1, $value2 ) - Fuzzy compare two values. Returns a number between 0 and 1, describing how good the match is. 
+	* get_hash_approx ( $value, %hash ), get_array_approx ( $value, @array ) - Gets the best hit from the array or the hash keys. Return an arrayref with [ $how_good, $hit ], where $how_good is how good the hit is (between 0 and 1), and $hit is the actual hit.
+
+4. ADDITIONAL INFO ABOUT THE IRC OBJECT
+---------------------------------------
+
+mootykins3 gives each IRC object a few special members:
+
+$irc -> {MTK_SERVER_NAME} - The server name for this connection.
+$irc -> {MTK_SERVER} - This connections server address.
+$irc -> {MTK_PORT} - This connections port.
+$irc -> {MTK_NICK} - The bots nick.
+$irc -> {MTK_NAME} - The bots ircname.
+$irc -> {MTK_USERNAME} - The username used for logging in.
+$irc -> {MTK_CHANNELS} - The joined channels on this server.
+$irc -> {MTK_LOCALADDR} - This connections local IP.
+$irc -> {MTK_PLUGINS} - Arrayref to this servers plugins (as names).
+$irc -> {MTK_PLUGIN_HASH} - A hash with all plugins. Keys are the names, items are the objects.
+
+5. COLOUR REFERENCE
+-------------------
+
+Borrowed from the irssi docs.
+
+                foreground (fg)     background (bg)
+    -------------------------------------------------------
+     0          white               light gray   + blinking fg
+     1          black               black
+     2          blue                blue
+     3          green               green
+     4          light red           red          + blinking fg
+     5          red                 red
+     6          magenta (purple)    magenta
+     7          orange              orange
+     8          yellow              orange       + blinking fg
+     9          light green         green        + blinking fg
+     10         cyan                cyan
+     11         light cyan          cyan         + blinking fg
+     12         light blue          blue         + blinking fg
+     13         light magenta       magenta      + blinking fg
+     14         gray                black        + blinking fg
+     15         light gray          light gray
+
+Now you know all you need to know to write mootykins3 plugins. If some things are still unclear, don't worry - Just have a look at some of the existing plugins. triggers.pl and give_stuff.pl are rather small and easy to read.
+
+If you actually create a new plugin, and if it's only a simple one, please mail it to me - lorenzd@gmail.com. :)

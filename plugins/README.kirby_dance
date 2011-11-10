@@ -1,0 +1,42 @@
+kirby_dance.pl - Kirby dance plugin for mootykins3
+==================================================
+
+This plugin produces kirby dances, like, for example:
+
+(~o_o)~ <(-_-v) (^_^)/ (v'_')> \(o_o) (~^_^)~ ~(-_-~) (~'_')~ \(o_o) (>*_*)> < SUNSHINE!
+
+It is just about the most complex script for doing this that you will find, anywhere. It will activate when it sees the phrase "kirby dance" or upon the use of the "!kirby" trigger. Usage information from mootyhelp is reproduced below:
+
+!kirby --num <number> --say-(right|left|nothing) --text <text> --no-[wavy|normal|extra] --no-eyes-[happy|serious|cool|starry|confused] --colour-(all|some|none)
+
+You can configure it in the config file by setting these values, all in the section [plugin::kirby_dance] (You are kindly advised to do no config'ing, if you feel you have to, PLEASE READ 4.):
+
+1. Kirby sets
+-------------
+
+kirbys_normal - Default: <(^_^<), (>^_^)>, (>^_^<), <(^_^)>
+kirbys_wavy - Default: ~(^_^~), ~(^_^)~, (~^_^)~
+kirbys_xtra - Default: [- . -], (v^_^)>, <(^_^v), \(^_^), (^_^)/, \(^_^)/
+
+With these, you can specify which kirbys are in the "default", the "wavy" and the "xtra" sets of kirbys.
+
+2. Kirby set usage
+------------------
+
+use_normal - Default: 1
+use_wavy - Default: 1
+use_xtra - Default: 1
+
+With these you can control which sets of kirbys to use in a default kirby dance. This can be overridden by giving the !kirby trigger parameters.
+
+3. Other things
+---------------
+
+eyes - The kirbys eyes ('^') will be replaced by random eyes from this list. Default: ^,',-,*,o
+texts - The texts the kirbys say. Default: HEART!,SUPER HAPPY FUN!,OH YEAH!,PINK FLUFFY BALLS OF LOVE!,KIRBY DANCE!,WOOOOOOOOOO!,SUNSHINE!,HEART!,IT IS THE POWER OF LOVE!
+colour - Give kirbys pink colour. 0: No colour, 1: All are coloured, 2: Some are coloured. Default: 1
+
+4. A WORD OF WARNING ABOUT THE "eyes" SETTING
+---------------------------------------------
+
+The eyes list MUST always contain 5 values. These will always be seen by the user as beeing, in this oder, the happy-, serious-, cool-, starry- and confusedeyes. It's recommended that you don't touch this until I get around to making this a little better.

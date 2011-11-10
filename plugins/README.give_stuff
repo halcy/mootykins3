@@ -1,0 +1,32 @@
+give_stuff.pl - Stuff giving plugin for mootykins3
+==================================================
+
+This plugin can give items of several types to people. It can be used like this:
+!(thing)[to (person) [-type], for example: !beerto mootykins -skol, or just !vodka.
+
+Three types of things (beer, whiskey and vodka) are included with this plugin, an example config using some of them is reproduced below:
+
+[plugin::give_stuff::beer]
+type_file = plugins/beer_types.txt
+prefix = a fresh,, cold,
+
+[plugin::give_stuff::vodka]
+type_file = plugins/vodka_types.txt
+prefix = a nice glass of, a nice bottle of
+
+[mootykins::servers::example]
+plugin::give_stuff::active = beer, vodka
+
+Single config values explained:
+-------------------------------
+
+Define a giveable thing with a section:
+[plugin::give_stuff::<thing>]
+
+Give some settings for the thing:
+type_file - Where to get the types of things from. path to a file with one type per line.
+prefix - A prefix to place before the thing in the response.
+
+Set the stuff to be used like this:
+mootykins::servers::<server name>::plugin::give_stuff::active - Active stuff, per-server.
+mootykins::channels::<server name>::<channel name>::plugin::give_stuff::active - Active stuff, per-channel.

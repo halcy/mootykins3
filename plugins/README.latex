@@ -1,0 +1,46 @@
+latex.pl - LaTeX renderer for mootykins3
+========================================
+
+This plugin provides a !latex trigger, which will render the
+text given to it as a LaTeX math expression, and puts the resulting
+png into somewhere, then posts a link to it. It uses textogif to
+do this. 
+
+You can get textogif at http://www.fourmilab.ch/webtools/textogif/ ,
+or use the Version that comes with this plugin.
+
+Prerequisites for running it are:
+	Perl		5.8.0 (4.036 or above should work)
+	TeX		3.14159 (Web2C 7.3.1)
+	LaTeX2e		<2000/06/01> (Included with most TeX distributions)
+	dvips		dvipsk 5.86 (Included with most TeX distributions)
+	Ghostscript	6.52 (2001-10-20)
+	Netpbm		9.24
+
+
+Config values:
+plugin::latex::path	Path where the resulting png images
+			(and .tex files) should be stored.
+			ALSO CHANGE THIS IN THE textgif.sh SCRIPT
+			PROVIDED WITH THIS PLUGIN. Also, textogif has
+			to be placed in this path, and has to be in
+			working order.
+plugin::latex::url	The same path, as seen by some web server
+			you have set up.
+plugin::latex::textogif	Path to the textgif.sh script provided with
+			this plugin.
+			
+All values default to "", so things will fail very silently if
+you do not set stuff up properly.
+
+EXAMPLE CONFIG:
+===============
+mootykins.config:
+	[plugin::latex]
+	path = /home/halcyon/www/mootylatex/
+	url = http://halcy.de/mootylatex/
+	textogif = /home/halcyon/www/mootylatex/textgif.sh
+
+textgif.sh:
+	cd /home/halcyon/www/mootylatex/
+	./textogif -png $1

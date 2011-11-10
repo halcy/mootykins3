@@ -1,0 +1,137 @@
+mootykins3 - An extensible IRC bot written in Perl
+==================================================
+
+Contents:
+1. Introduction
+2. How to run
+3. Configuration
+3.1 Format
+3.2 Global configuration values
+4. Further reading
+5. Known issues
+6. Who did this
+
+1. INTRODUCTION
+---------------
+
+mootykins3 is an IRC bot, written in the Perl language using POE::Component::IRC and licensed under the GNU GPL. It features:
+
+	* Flexible configuration options. The bot can be made to do a lot of things by just changing the config a bit.
+	* Multi-Server multi-channel support.
+	* Multi-Threaded - Does not hang while doing I/O or HTTP requests or other longish tasks.
+	* Reconfiguration, including connecting and disconnecting and loading new plugins, without restarting the bot.
+	* Ease of use, the bot makes a lot of good guesses about what you will probably need to do and works accordingly.
+	* Extensive documentation. Everything is explained, so you'll have no trouble getting everything to work.
+	* An easy-to-use plugin interface so you can easily extend the bot. (If you know a bit of perl, that is.)
+	* Some default-plugins out of the box to get you started:
+		* triggers - Can react to several user-definable triggers.
+		* infobot - A basic infobot, with fuzzy matching on factoids.
+		* relay - Relay messages from a channel to other channels and servers.
+		* give_stuff - A plugin which can give people types of stuff, like !beer.
+		* kirby_dance - The most sophisticated kirby dance creator, ever.
+		* bash - Gives quotes from bash.org and similar sites.
+		* help - Help system, to give help for all the other plugins.
+		* goauld - Speaks some Goa'uld.
+		* none - A placeholder plugin that does nothing.
+		
+2. HOW TO RUN
+-------------
+
+To run mootykins3, you need:
+
+	* A newish version of Perl 5
+	* The module POE::Component::IRC. You can install this from the CPAN (sudo perl -MCPAN -e "install POE::Component::IRC")
+	* The module Algorithm::HowSimilar. You can install this from the CPAN (sudo perl -MCPAN -e "install Algorithm::HowSimilar")
+	* The modules "threads", "threads::shared" and "Thread::Queue", from the CPAN, see above.
+	* For the bash plugin, "LWP::UserAgent" (sudo perl -MCPAN -e "install 'LWP::UserAgent'" on the command line - if some of the network tests fail, don't enable them.)
+	* Possibly some more modules for the plugins you are using. Check the plugin's README files.
+
+If you have all these, running mootykins3 is as easy as configuring the bot (See the next section for how to do that) and executing mootykins3.pl (./mootykins3.pl).
+
+
+3. CONFIGURATION
+----------------
+
+3.1 FORMAT
+
+mootykins3 has a pretty simple config file formats. Basically, there are three types of things in the mootykins3 config file ("mootykins.config"):
+
+	* Sections. These are in square brackets, like this: [mootykins::servers::example]
+	* Values
+		* Single value: address = irc.example.com
+		* List of values, comma-seperated: plugin::triggers::active = plugins = kirby_dance, triggers, help
+
+Actual commata have to be escaped as double-commata, so ',' becomes ',,'.
+
+Sections and names of values combine to form one big config item name. This is best shown by an example: If you have this configuration
+
+	[mootykins::channels::example::#example]
+	plugins = kirby_dance, triggers, help
+
+then you have a config item called "mootykins::channels::example::#example::plugins", which is a list with the items "kirby_dance", "triggers" and "help"
+
+Lists also get auto-created for sections, so if you have two sections, say:
+
+	[mootykins::channels::example::#example]
+
+	[mootykins::channels::example::#example2]
+
+then a config item called "mootykins::channels::example" with two entries, "#example" and "#example2" exists.
+
+Most plugins are written so that the values from higher levels drop down to lower levels unless further specified, so if something is configured for the server, then than configuration is also used for the channels on that server, unless something else is specified.
+
+There are a number of variables which will be replaced in outgoing messages, so you can use those in the config file in strings that are going to be sent to the server. The variables are:
+
+	* %sender - The person who sent the message we're reacting too.
+	* %channel - The channel in which the message was said, or the sender if it's a private message.
+	* %server - The name of the server, as specified in the config file.
+	* %myname - The bots nick.
+	* %said - The exact message we're reacting to.
+	* %to - The person or channel to which this message is addressed.
+
+3.2 GLOBAL CONFIGURATION VALUES
+
+Variables are in <>.
+
+Global:
+mootykins::servers - List of all servers to connect to.
+mootykins::admin_password - The admin password. CHANGE THIS. Default: "romkatt".
+
+Global and per server (Can also be set as mootykins::<setting> instead of mootykins::servers::<server name>::<setting>):
+mootykins::servers::<server name>::address - This servers address. Default: "localhost".
+mootykins::servers::<server name>::port - The port on which to connect to the server. Default: 6667
+mootykins::servers::<server name>::nick - The nick to use. Default: mootykins
+mootykins::servers::<server name>::ircname - The irc name used for connecting. Default: mootykins3 + version
+mootykins::servers::<server name>::channels - The channels to join on this server. Default: #mootykins
+mootykins::servers::<server name>::local_addr - The local IP address of this client. "Auto" means the address will be determined from ther server. Default: auto
+
+Global, per server and per-channel (Can also be set as mootykins::<setting> or mootykins::servers::<server name>::<setting> instead of mootykins::channels::<server name>::<channel name>::<setting>):
+mootykins::channels::<server name>::<channel name>::plugins - The plugins active in this channel.
+
+Additionally, the plugins use the config file too. Look in their READMEs for configuration instructions.
+
+3.2 ADMIN COMMANDS
+
+To reload all plugins, reread the config file from disk, and have the bot act accordingly, send it a message saying "!admin your_password rehash". To have the bot send raw commands to the server, use "!admin your_password raw some command". Use "!admin your_password shutdown" to make the bot exit gracefully.
+
+4. FURTHER READING
+------------------
+
+It's suggested that you read the plugin READMEs in the plugin directory, and if you want to make new plugins (Go on, it's easy!), you can have a look at "HOWTO.PLUGINS". If you are new to IRC, you can have a look at the mIRC IRC FAQ: http://www.mirc.com/ircintro.html .
+
+5. KNOWN ISSUES
+---------------
+
+At the time of writing this, there are no known bugs in mootykins3. There are some issues to be aware of, though:
+
+	* If the bot refuses to start, you might be lacking some needed modules. Makes sure you have installed all modules the bot needs. 
+	* Be aware that ALL files in the plugins directory ending on .pl will be loaded and treated like plugins, no matter if they are mentioned in the config file or not.
+	* If the config file is somehow wrong, strange errors might occur. Double check your config.
+	* mootykins3 will not rejoin after a kick. A plugin for this will come soonish.
+
+That's it. Have fun with your new IRC bot.
+
+6. WHO DID THIS / DEVELOPMENT
+-----------------------------
+
+The only person who wrote most of mootykins3 is Lorenz Diener (lorenzd@gmail.com), some of the plugins and data for them came from pihl (satf.se). I'm always very happy to recieve feature requests, criticism and bug reports (maybe even patches? :) ). New versions of mootykins3 can usually be found at http://halcy.de/pages/mootykins3 . The bleeding edge, probably broken version can be found via svn at svn://svn.satf.se/var/svn-repos/mootykins, or via websvn: http://svn.satf.se/websvn . (More thanks to pihl for this.)

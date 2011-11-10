@@ -1,0 +1,14 @@
+[plugin::fserv::triggers::animu]
+path = /home/halcyon/animu
+note = It is the animu!
+message = This is an animu trigger. Check out the animu here. FUCK yeah man.
+
+[plugin::fserv::triggers::prons]
+path = /home/halcyon/prons
+note = It is the prons!
+message = This is an prons trigger. Check out the animu here. FUCK yeah man.
+
+[plugin::fserv::queues::main_queue]
+file = /home/halcyon/animu
+max_sends = 2
+max_size = 15

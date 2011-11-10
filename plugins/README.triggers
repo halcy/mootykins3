@@ -1,0 +1,16 @@
+triggers.pl - A trigger plugin for mootykins3
+=============================================
+
+This plugin provides reactions to definable triggers. Configure like this:
+
+Use sections to define triggers:
+[plugin::triggers::<trigger>]
+
+Configure the triggers like this:
+message - What message should be used to respond. A list can be given, the elements of the list will be sent separateley. HAS NO DEFAULT. MUST BE SET FOR ANY TRIGGER.
+type - Can be say, notice or action. Say is normal /msg, notice is /notice, and action is /me. Default: say.
+to - To whom should the response be sent? Possible values are channel or sender. Default: sender.
+
+Set the triggers to be used like this:
+mootykins::servers::<server name>::plugin::triggers::active - Active triggers, per-server.
+mootykins::channels::<server name>::<channel name>::plugin::triggers::active - Active triggers, per-channel.

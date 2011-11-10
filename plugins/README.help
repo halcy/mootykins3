@@ -1,0 +1,4 @@
+help.pl - Help plugin for mootykins3
+====================================
+
+This plugin provides gives help for all the other plugins. It's not further configurable. Use it by including it in the used plugins list for a channel, and it will react to all !help queries.

@@ -1,0 +1,11 @@
+none.pl - Plugin for mootykins3
+===============================
+
+This plugin simply does nothing. When called, it does not respond at all. It's there so you can use it like this:
+
+[mootykins::servers::example]
+plugins = this,that,etcetera
+channels = #example
+
+[mootykins::channels::example::#example]
+plugins = none

@@ -1,0 +1,9 @@
+relay.pl - A message relay plugin for mootykins3
+================================================
+
+This plugin relays messages recieved in a channel to other channels on the same or a different server.
+
+Configuration values
+--------------------
+
+mootykins::channels::<server name>::<channel name>::plugin::relay::to - A list of channels to relay this channels messages to, in the form "channelname servername", for example "#example super_server, #blah other_server".
